@@ -6,6 +6,14 @@ class User < ActiveRecord::Base
     self.role ||= :user
   end
 
+  def added_school?
+    School.exists?(:user => self)
+  end
+
+  def users_school
+  	School.where(:user => self)[0]
+  end
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
