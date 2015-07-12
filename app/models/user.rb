@@ -7,11 +7,11 @@ class User < ActiveRecord::Base
   end
 
   def added_school?
-    School.exists?(:user => self)
+    School.exists?(:user => self.id)
   end
 
   def users_school
-  	School.where(:user => self)[0]
+  	School.where(:user => self)[0] if added_school?
   end
 
   # Include default devise modules. Others available are:

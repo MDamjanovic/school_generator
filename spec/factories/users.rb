@@ -8,5 +8,11 @@ FactoryGirl.define do
       role 'admin'
     end
 
+    trait :with_school do
+      after(:create) do |user|
+          create(:school, user_email: user.email)
+      end
+    end
+
   end
 end

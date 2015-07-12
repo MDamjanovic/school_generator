@@ -22,10 +22,24 @@ RSpec.describe Department, type: :model do
 
   subject {department}
 
+  describe "public instance methods" do
+    context "responds to its methods" do
+        it { expect(department.number).to be_a_kind_of(Numeric) }
+        it { should respond_to(:number) }
+    end
+  end 
+
   it { expect(department.number).to be_a_kind_of(Numeric) }
 
-  it { should respond_to(:number) }
-  it { should_not respond_to(:generate_students) }
-  it { should_not respond_to(:schedule_students) }
+  invalid_department1 = Department.new(number: 1)
+  it "must have a school" do    
+    expect(invalid_department1).not_to be_valid
+    expect(invalid_department1.errors[:school_id].size).to eql(1)
+  end
+
+  invalid_department2 = Department.new(school_id: 1)
+  it "must have a number" do    
+    expect(invalid_department2).not_to be_valid
+  end
   
 end

@@ -19,7 +19,7 @@ class School < ActiveRecord::Base
 	end
 
 	def has_students?
-		Student.exists?(:school_id => self)
+		Student.exists?(:school_id => self.id)
   	end
 
   	def students_are_scheduled?
@@ -35,6 +35,7 @@ class School < ActiveRecord::Base
   	end
 
   	def generate_students
+  		return if has_students?
 		#number of students
 		num = 90 + Random.rand(21)
 
@@ -94,6 +95,7 @@ class School < ActiveRecord::Base
   	end
 
   	def generate_departments
+  		return if departments_are_generated?
 
 	    self.number_of_departments.times{ |number|
 	       	number += 1
@@ -107,6 +109,7 @@ class School < ActiveRecord::Base
   	end
 
   	def update_departments
+  		return unless departments_are_generated?
   		unless self.number_of_departments == get_departments.count || !has_students?
 
 		    Department.where(:school_id => self.id).each { |department| 

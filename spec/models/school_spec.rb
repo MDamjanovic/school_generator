@@ -25,22 +25,107 @@ RSpec.describe School, type: :model do
     expect( build(:school)).not_to be_valid
   end
 
+  let(:school) { create(:school, user_email: 'some.other.school@test.com') }
+  subject {school} 
 
-  let(:school) { build(:school, user_email: 'some.other.school@test.com') }
+  describe "public instance methods" do
+    context "responds to its methods" do
+        it { should respond_to(:name) }
+        it { should respond_to(:number_of_departments) }
+        it { should respond_to(:user) }
+        it { should respond_to(:generate_students) }
+        it { should respond_to(:schedule_students) }
+        it { should respond_to(:has_students?) }
+        it { should respond_to(:students_are_scheduled?) }
+        it { should respond_to(:departments_are_generated?) }
+        it { should respond_to(:generate_departments) }
+        it { should respond_to(:update_departments) }
+        it { should respond_to(:get_students) }
+        it { should respond_to(:get_departments) }
+        it { should respond_to(:error) }
+        it { should respond_to(:remove_all_data) }
 
-  subject {school}
-
-  it { should respond_to(:name) }
-  it { should respond_to(:number_of_departments) }
-  it { should respond_to(:user) }
-  it { should respond_to(:generate_students) }
-  it { should respond_to(:schedule_students) }
+    end
+  end
 
   it { expect(school.number_of_departments).to be_a_kind_of(Numeric) }
 
   it "expect to be string only with letters and digits" do
      expect(school.name).to match /[A-Za-z0-9]+/
-  end   
+  end  
+
+  let(:schoolWithStudents) { create(:school, :with_students, user_email: 'school.students@test.com') }
+  let(:schoolWithSchedule) { create(:school, :with_schedule, user_email: 'school.schedule@test.com') }
+
+  context "executes methods correctly" do
+
+    context "#has_students?" do
+      it "returns false if school dont have students" do
+        expect(school.has_students?).to eq(false)
+      end
+      it "returns true if school has students" do
+        expect(schoolWithStudents.has_students?).to eq(true)
+      end
+  end
+
+  context "#students_are_scheduled?" do
+    it "returns false if students are not scheduled" do
+      expect(school.students_are_scheduled?).to eq(false)
+      expect(schoolWithStudents.students_are_scheduled?).to eq(false)
+    end
+    it "returns true if students are scheduled" do
+      expect(schoolWithSchedule.students_are_scheduled?).to eq(true)
+    end
+  end
+
+  context "#departments_are_generated?" do
+    it "returns false if departments are not generated (students are not scheduled)" do
+      expect(school.departments_are_generated?).to eq(false)
+      expect(schoolWithStudents.departments_are_generated?).to eq(false)
+    end
+    it "returns true if departments not generated (students are scheduled)" do
+      expect(schoolWithSchedule.departments_are_generated?).to eq(true)
+    end
+  end
+
+  context "#schedule_students" do
+    it "returns array of students if students were not scheduled" do
+      expect(schoolWithStudents.schedule_students).to be_a_kind_of(Array)
+    end
+
+    it "returns nil if students are already scheduled" do
+      expect(schoolWithSchedule.schedule_students).to eq(nil)
+    end
+  end  
+  
+  context "#update_departments" do
+    it "returns nil if departments are not generated" do
+      expect(schoolWithSchedule.update_departments).to eq(nil)
+    end
+  end
+
+  context "#get_students" do
+    it "returns array of students if students were generated" do
+      expect(schoolWithStudents.get_students.count).to be > 0
+    end
+
+    it "returns empty array if students are not generated" do
+      expect(school.get_students.count).to eq(0)
+    end
+  end
+
+  context "#get_departments" do
+    it "returns array of departments if students were scheduled" do
+      expect(schoolWithSchedule.get_departments.count).to be > 0
+    end
+
+    it "returns empty array if students are not scheduled" do
+      expect(school.get_departments.count).to eq(0)
+      expect(schoolWithStudents.get_departments.count).to eq(0)
+    end
+  end
+
+  end 
 
   invalid_school1 = School.new(user_id:1, name:nil)
 

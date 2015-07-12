@@ -16,6 +16,5 @@ FactoryGirl.define do
     department_id do
       students_department
     end
-
   end
 end
