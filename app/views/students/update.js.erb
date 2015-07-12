@@ -1,0 +1,1 @@
+$("#edit_student_<%=@student.id%>").find( "span" ).text("<%= @student.with_special_needs.nil?? 'no' : 'yes' %>");

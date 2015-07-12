@@ -9,10 +9,10 @@ class StudentsController < ApplicationController
     respond_to do |format|
       if @student.save
         format.html { redirect_to :back}
-        format.js 
+        format.js { }
       else
         format.html { redirect_to :back}
-        format.js 
+        format.js { }
       end
     end
   end

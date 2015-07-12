@@ -29,13 +29,15 @@
                       <%= student.name %>
                       </td>
                       <td class = "text-center">
-                        <%= form_for student, remote: true do |f| %>
+
+                        <%= form_for student, :remote => true  do |f| %>
                           <span class = "with-special-needs">
                             <%= student.with_special_needs.nil?? 'no': 'yes' %>
                           </span>
                           &nbsp&nbsp
                           <%= f.submit "edit",:class => 'btn btn-xs btn-warning edit-btn' %>
                         <% end %>
+                        
                       </td>
                       <td>
                         <%= student.gender %>
