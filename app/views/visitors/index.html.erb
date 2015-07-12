@@ -1,2 +1,23 @@
 <h3>Welcome</h3>
-<p><%= link_to 'Users:', users_path %> <%= User.count %> registered</p>
+<p>
+	<% if user_signed_in? %>
+		<h4><%= current_user.name %><h4>
+		<p>
+
+			<% unless (current_user.try(:admin?) || current_user.added_school?) %>
+				<%= link_to 'Generate school', new_school_path %>
+			<% else%>
+				You're already created school: &nbsp&nbsp
+				<% school = current_user.users_school %>
+				<strong> <%= school.name %> </strong>
+				<br>
+		       	<%= link_to 'Edit', edit_school_path(school.id) %>&nbsp&nbsp|&nbsp
+		       	<%= link_to 'View', school_path(school.id) %>&nbsp&nbsp|&nbsp
+		       	<%= link_to "Delete", school_path(school.id), method: :delete, data: { confirm: 'Are you sure you want to delete school?' }%>
+			<% end %>
+
+		</p>
+	<% else %>	
+		<%= link_to 'Users:', users_path %> <%= User.count %> registered
+	<% end %>
+</p>	

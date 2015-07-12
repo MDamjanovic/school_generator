@@ -1,0 +1,16 @@
+<div class = "authform">
+	<%= simple_form_for(@school) do |f| %>
+	  	<%= f.error_notification  message: @school.error %>
+   		<div class="form-group">
+	     	<%= f.label :name %>
+      		<%= f.text_field :name, :autofocus => true, class: 'form-control' %>
+      		<%= f.label :number_of_departments %>
+	      	<%= f.text_field :number_of_departments, :autofocus => true, class: 'form-control' %>
+	    </div>
+	    <% unless current_user.added_school? %>
+	    	<%= f.submit 'create school', :class => 'btn btn-success form-group' %>
+	    <% else %>
+	       	<%= f.submit 'edit school', :class => 'btn btn-success form-group' %>
+	    <% end %>
+	<% end %>
+</div%>

@@ -1,7 +1,12 @@
 <%# add navigation links to this file %>
 <% if user_signed_in? %>
   <li><%= link_to 'Edit account', edit_user_registration_path %></li>
-  <li><%= link_to 'Sign out', destroy_user_session_path, :method=>'delete' %></li>
+
+    <% unless current_user.try(:admin?) || !current_user.added_school? %>
+      <% school = current_user.users_school %>
+		  <li><%= link_to 'School', school_path(school.id) %></li>
+  	<% end %>
+
 <% else %>
   <li><%= link_to 'Sign in', new_user_session_path %></li>
   <li><%= link_to 'Sign up', new_user_registration_path %></li>
@@ -11,4 +16,5 @@
     <li><%= link_to 'Admin', '/admin' %></li>
     <li><%= link_to 'Users', users_path %></li>
   <% end %>
+    <li><%= link_to 'Sign out', destroy_user_session_path, :method=>'delete' %></li>
 <% end %>
